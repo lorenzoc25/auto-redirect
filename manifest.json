@@ -1,0 +1,14 @@
+{
+  "name": "auto-redirect",
+  "description": "Open pages in current tab instead of new tab on specific domains",
+  "version": "1.0",
+  "manifest_version": 3,
+  "permissions": [
+    "tabs",
+    "activeTab",
+    "storage"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
+}
