@@ -9,7 +9,7 @@
     "storage"
   ],
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "src/background.js"
   },
   "content_scripts": [
     {
@@ -17,7 +17,10 @@
         "http://*/*",
         "https://*/*"
       ],
-      "js": ["content-script.js"]
+      "js": ["src/content-script.js"]
     }
-  ]
+  ],
+  "action": {
+    "default_popup": "ui/popup.html"
+  }
 }

@@ -1,10 +1,8 @@
-console.log('background.js running');
-
-
 const targetSite = ['bilibili.com'];
 let shiftPressed = false, ctrlPressed = false;
 
-const matchRule = (url) => {
+const matchRule = (url: String | undefined) => {
+  if (!url) return false;
   for (const target of targetSite) {
     if (url.includes(target)) {
       return true;
@@ -18,7 +16,7 @@ chrome.tabs.onCreated.addListener(
     const newPage = await getCurrentTab();
     const url = newPage.pendingUrl;
     if (matchRule(url) && !shiftPressed) {
-      chrome.tabs.remove(tab.id);
+      chrome.tabs.remove(tab.id as number);
       chrome.tabs.update({url: url});
     }
 });
