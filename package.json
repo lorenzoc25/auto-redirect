@@ -1,13 +1,14 @@
 {
-  "name": "chrome-extension-typescript-starter",
+  "name": "auto-redirect",
   "version": "1.0.0",
-  "description": "chrome-extension-typescript-starter",
+  "description": "Open pages in current tab instead of new tab on specific domains",
   "main": "index.js",
   "scripts": {
     "watch:src": "webpack --config webpack/webpack.dev.js --watch",
     "watch:ui": "tailwindcss -i ./ui/tailwind.css -o ./ui/index.css --watch",
     "watch": "concurrently 'yarn watch:src' 'yarn watch:ui'",
-    "build": "webpack --config webpack/webpack.prod.js",
+    "build:ui": "tailwindcss -i ./ui/tailwind.css -o ./ui/index.css",
+    "build": "yarn build:ui && webpack --config webpack/webpack.prod.js",
     "clean": "rimraf dist",
     "test": "jest",
     "style": "prettier --write \"src/**/*.{ts,tsx}\""
