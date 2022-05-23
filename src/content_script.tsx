@@ -7,14 +7,12 @@ window.addEventListener('keydown',function(event){
 			response => {
 				console.log(response);
 			});
-		console.log('shiftPressed');
 	} else if (event.ctrlKey || event.metaKey) {
 		chrome.runtime.sendMessage(
 			{type: 'ctrlPressed'}, 
 			response => {
 				console.log(response);
 			});
-		console.log('ctrlPressed');
 	}
 });
 

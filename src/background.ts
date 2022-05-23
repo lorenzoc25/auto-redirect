@@ -44,6 +44,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
 		break;
 	case 'keyup':
 		shiftPressed = false;
+		ctrlPressed = false;
 		break;
 	case 'getCurrentRule':
 		// get current rule from storage and send it back
