@@ -32,6 +32,13 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
       case 'keyup':
           shiftPressed = false;
           break;
+      case 'getCurrentRule':
+          sendResponse(targetSite);
+        break;
+      case 'addNewSite':
+          addNewSite(request.site);
+          sendResponse(targetSite);
+          break;
   }
 }); 
 
@@ -40,4 +47,7 @@ async function getCurrentTab() {
   const queryOptions = { active: true, lastFocusedWindow: true };
   const [tab] = await chrome.tabs.query(queryOptions);
   return tab;
+}
+const addNewSite = (site: string) => {
+  targetSite.push(site);
 }
