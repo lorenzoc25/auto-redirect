@@ -1,21 +1,15 @@
 let shiftPressed = false, ctrlPressed = false;
-
-// Where we will expose all the data we retrieve from storage.sync.
 let rulesCache: string[] = [];
-
-const updateRulesCache = getRulesFromStorage().then(rules => {
-  rulesCache = rules;
-	return rulesCache;
-});
 
 const matchRule = async (url: string | undefined) => {
 	if (!url) {
 		return false;
 	} 
-  // get all rules from chrome storage
-	await updateRulesCache;
+	const rules = await getRulesFromStorage();
+	rulesCache = rules;
 	for (const target of rulesCache) {
 		if (url.includes(target)) {
+			console.log('should return true!');
 			return true;
 		}
 	}
@@ -27,6 +21,7 @@ chrome.tabs.onCreated.addListener(
 		const newPage = await getCurrentTab();
 		const url = newPage.pendingUrl;
 		const isMatched = await matchRule(url);
+		console.log('retutned value:', isMatched);
 		if (isMatched && !shiftPressed && !ctrlPressed) {
 			chrome.tabs.remove(tab.id as number);
 			chrome.tabs.update({url: url});
@@ -49,11 +44,13 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
 		break;
 	case 'keyup':
 		shiftPressed = false;
+		ctrlPressed = false;
 		break;
 	case 'getCurrentRule':
 		// get current rule from storage and send it back
 		getRulesFromStorage().then(
 			rules => {
+				rulesCache = rules;
 				sendResponse(rules);
 			}
 		);

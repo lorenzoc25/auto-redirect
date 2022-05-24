@@ -7,7 +7,6 @@ const uiDir = path.join(__dirname, "..", "ui");
 module.exports = {
     entry: {
       popup: path.join(uiDir, 'popup.tsx'),
-      options: path.join(uiDir, 'options.tsx'),
       background: path.join(srcDir, 'background.ts'),
       content_script: path.join(srcDir, 'content_script.tsx'),
     },
