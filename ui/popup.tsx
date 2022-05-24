@@ -43,8 +43,9 @@ const Popup = () => {
 						onChange={handleChange}
 					/>
 					<button 
-						className=" bg-cyan-700 text-white p-2 rounded-r"
+						className=" bg-cyan-700 text-white p-2 rounded-r disabled:bg-slate-400 disabled:hover:cursor-not-allowed"
 						onClick={onClick}
+						disabled={inputRule === ''}
 					>
       Add
 					</button>
