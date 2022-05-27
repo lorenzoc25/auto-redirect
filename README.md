@@ -27,6 +27,8 @@ Note: currently, the extension achieve its functionally by using `url.include('r
 - Improve on UI
 - Regex matching on rules
 - Deleting rules / temporarily disable them (WIP)
+- Forbid adding duplicate rules
+- Add rules that open pages in new tab instead of redirection (WIP)
 
 ## Contributing
 To contribute, please fork this repository and open a pull request
