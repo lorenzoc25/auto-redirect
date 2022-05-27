@@ -36,6 +36,7 @@ module.exports = {
 		'semi': [
 			'error',
 			'always'
-		]
+		],
+		'code': 80,
 	}
 };

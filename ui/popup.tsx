@@ -32,7 +32,9 @@ const Popup = () => {
 			<div className="flex flex-col items-center mt-1 bg-slate-200 rounded mx-2 mb-20">
 				<ul>
 					{currentRule && currentRule.map(rule => (
-						<li className="py-1 text-cyan-600" key={rule}>{rule}</li>
+						<li className="py-1 text-cyan-600" key={rule}>
+							{rule}
+						</li>
 					))}
 				</ul>
 				<div className="fixed bottom-6 rounded shadow-md">
@@ -47,7 +49,7 @@ const Popup = () => {
 						onClick={onClick}
 						disabled={inputRule === ''}
 					>
-      Add
+      			Add
 					</button>
 				</div>
 			</div>

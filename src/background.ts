@@ -1,32 +1,90 @@
 let shiftPressed = false, ctrlPressed = false;
-let rulesCache: string[] = [];
 
-const matchRule = async (url: string | undefined) => {
-	if (!url) {
-		return false;
-	} 
-	const rules = await getRulesFromStorage();
-	rulesCache = rules;
-	for (const target of rulesCache) {
-		if (url.includes(target)) {
-			console.log('should return true!');
-			return true;
-		}
-	}
-	return false;
+/**
+ * @interface Rules
+ * @member {string[]} redirectionRules - site we want to redirect to instead of new tab
+ * @member {string[]} newTabRules - site we want to open in new tab instead of redirect
+ */
+interface Rules {
+	redirectionRules: string[] 
+	newTabRules: string[];
+}
+
+let rulesCache: Rules = {
+	redirectionRules: [],
+	newTabRules: []
 };
 
-chrome.tabs.onCreated.addListener(
-	async (tab) => {
-		const newPage = await getCurrentTab();
-		const url = newPage.pendingUrl;
-		const isMatched = await matchRule(url);
-		console.log('retutned value:', isMatched);
-		if (isMatched && !shiftPressed && !ctrlPressed) {
-			chrome.tabs.remove(tab.id as number);
-			chrome.tabs.update({url: url});
+listenOnTabs();
+
+function listenOnTabs() {
+	listenForMessage();
+	handleNewTab();
+	handleRedirection();
+}
+
+function listenForMessage() {
+	chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
+		switch(request.type){
+		case 'shiftPressed':
+			shiftPressed = true;
+			break;
+		case 'ctrlPressed':
+			ctrlPressed = true;
+			break;
+		case 'keyup':
+			shiftPressed = false;
+			ctrlPressed = false;
+			break;
+		case 'getCurrentRule':
+			// get current rule from storage and send it back
+			getRulesFromStorage().then(
+				rules => {
+					rulesCache = rules;
+					// TODO: handle both type of rules
+					sendResponse(rules.redirectionRules);
+				}
+			);
+			return true;
+		case 'addNewSite':
+			getRulesFromStorage().then(
+				storage => {
+					// TODO: handle both type of rules
+					console.log(storage);
+					const rules = storage.redirectionRules? storage.redirectionRules : [];
+					rules.push(request.site);
+					rulesCache = {
+						redirectionRules: rules,
+						newTabRules: storage.newTabRules
+					};
+					chrome.storage.sync.set(
+						{
+							'redirectionRules': rulesCache.redirectionRules,
+							'newTabRules': rulesCache.newTabRules
+						}, 
+						() => {
+						console.log('added new rule', request.site);
+					});
+					sendResponse(rulesCache.redirectionRules);
+				}
+			);
+			return true;
 		}
-	});
+	}); 
+}
+
+function handleNewTab() {
+	chrome.tabs.onCreated.addListener(
+		async (tab) => {
+			const newPage = await getCurrentTab();
+			const url = newPage.pendingUrl;
+			const isMatched = await matchRule(url);
+			if (isMatched && !shiftPressed && !ctrlPressed) {
+				chrome.tabs.remove(tab.id as number);
+				chrome.tabs.update({url: url});
+			}
+		});
+}
 
 async function getCurrentTab() {
 	const queryOptions = { active: true, lastFocusedWindow: true };
@@ -34,49 +92,37 @@ async function getCurrentTab() {
 	return tab;
 }
 
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
-	switch(request.type){
-	case 'shiftPressed':
-		shiftPressed = true;
-		break;
-	case 'ctrlPressed':
-		ctrlPressed = true;
-		break;
-	case 'keyup':
-		shiftPressed = false;
-		ctrlPressed = false;
-		break;
-	case 'getCurrentRule':
-		// get current rule from storage and send it back
-		getRulesFromStorage().then(
-			rules => {
-				rulesCache = rules;
-				sendResponse(rules);
-			}
-		);
-		return true;
-	case 'addNewSite':
-		getRulesFromStorage().then(
-			rules => {
-				rules.push(request.site);
-				rulesCache = rules;
-				chrome.storage.sync.set({'rules': rulesCache}, () => {
-					console.log('added new rule', request.site);
-				});
-				sendResponse(rulesCache);
-			}
-		);
-		return true;
-  }
-}); 
+async function matchRule(url: string | undefined) {
+	if (!url) {
+		return false;
+	} 
+	const rules = await getRulesFromStorage();
+	rulesCache = rules;
+	console.log(rulesCache);
+	for (const target of rulesCache.redirectionRules) {
+		if (url.includes(target)) {
+			return true;
+		}
+	}
+	return false;
+};
 
-function getRulesFromStorage(): Promise<string[]> {
+function handleRedirection() {
+	// TODO
+}
+
+
+function getRulesFromStorage(): Promise<Rules> {
   return new Promise((resolve, reject) => {
-    chrome.storage.sync.get({'rules':[]}, (items) => {
+    chrome.storage.sync.get(null, (storage) => {
       if (chrome.runtime.lastError) {
         return reject(chrome.runtime.lastError);
       }
-      resolve(items.rules);
+			const rulesObj:Rules = {
+				redirectionRules: storage.redirectionRules,
+				newTabRules: storage.newTabRules
+			}
+      resolve(rulesObj);
     });
   });
 }
