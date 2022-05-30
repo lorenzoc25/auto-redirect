@@ -2,8 +2,10 @@
 This is a chrome extension that allow you to open pages in current tab instead of new tab on customized domain.
 
 ## Install
-This extension has not been uploaded to the chrome extension store yet, so you need to clone this repository, build it and load it manually.
+### Download the Newest Release
+Go to the [relase page](https://github.com/lorenzoc25/auto-redirect/releases/), download the newset release, unzip it and load it to the chrome extension, or
 
+### Clone the Repo and Build it Manually(Not suggested)
 ```bash
 git clone https://github.com/lorenzoc25/auto-redirect && cd auto-redirect
 ```
@@ -16,9 +18,10 @@ npm i && npm build
 ```
 The extension will then be built on `./auto-redirect/dist` path.
 
-Then, turn on the chrome developer mode by going to `chrome://extensions/` and toggle the developer mode on the upper-right corner.
+### Loading it to Chrome
+Turn on the chrome developer mode by going to `chrome://extensions/` and toggle the developer mode on the upper-right corner.
 
-After turning on the developer mode, select the 'load unpacked' option on the upper-left corner and load the built version on `./auto-redirect/dist`. You should then be ready to go!
+After turning on the developer mode, select the 'load unpacked' option on the upper-left corner and select the directory of the unzipped/built file. You should then be ready to go!
 
 ## Usage
 After loading the extension, you can find it on the chrome extension section. Clicking on the icon would give you an user interface. Simply type in the domain names and this extension will automatically work on them! 
