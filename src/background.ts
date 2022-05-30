@@ -46,15 +46,13 @@ function listenForMessage() {
 				}
 			);
 			return true;
-		case 'addNewSite':
+		case 'updateRule':
 			getRulesFromStorage().then(
 				storage => {
 					// TODO: handle both type of rules
-					console.log(storage);
-					const rules = storage.redirectionRules? storage.redirectionRules : [];
-					rules.push(request.site);
+					const newRules = request.newRules;
 					rulesCache = {
-						redirectionRules: rules,
+						redirectionRules: newRules,
 						newTabRules: storage.newTabRules
 					};
 					chrome.storage.sync.set(
@@ -63,7 +61,7 @@ function listenForMessage() {
 							'newTabRules': rulesCache.newTabRules
 						}, 
 						() => {
-						console.log('added new rule', request.site);
+						console.log('updated redirection rule to', request.newRules);
 					});
 					sendResponse(rulesCache.redirectionRules);
 				}
@@ -72,6 +70,7 @@ function listenForMessage() {
 		}
 	}); 
 }
+
 
 function handleNewTab() {
 	chrome.tabs.onCreated.addListener(

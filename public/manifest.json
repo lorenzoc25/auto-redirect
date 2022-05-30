@@ -24,6 +24,7 @@
   "permissions": [
     "storage",
     "tabs",
-    "activeTab"
+    "activeTab",
+    "webRequest"
   ]
 }

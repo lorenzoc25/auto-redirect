@@ -6,11 +6,13 @@ This extension has not been uploaded to the chrome extension store yet, so you n
 
 ```bash
 git clone https://github.com/lorenzoc25/auto-redirect && cd auto-redirect
-yarn build
+```
+```
+yarn && yarn build
 ```
 or if you are using npm
 ```
-npm build
+npm i && npm build
 ```
 The extension will then be built on `./auto-redirect/dist` path.
 
@@ -24,11 +26,11 @@ After loading the extension, you can find it on the chrome extension section. Cl
 Note: currently, the extension achieve its functionally by using `url.include('rules')` to detect if it should change new tab to redirect in `url`. Thus, a suggested way to include rules is to type the full domain name like `bilibili.com`.
 
 ## Future Plans
-- Improve on UI
-- Regex matching on rules
-- Deleting rules / temporarily disable them (WIP)
-- Forbid adding duplicate rules
-- Add rules that open pages in new tab instead of redirection (WIP)
+- [ ] Improve on UI
+- [ ] Regex matching on rules
+- [x] Deleting rules / temporarily disable them
+- [ ] Forbid adding duplicate rules
+- [ ] Add rules that open pages in new tab instead of redirection (WIP)
 
 ## Contributing
 To contribute, please fork this repository and open a pull request

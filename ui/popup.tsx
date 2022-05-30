@@ -19,25 +19,49 @@ const Popup = () => {
 	};
 
 	const onClick = () => {
-		chrome.runtime.sendMessage({ type: 'addNewSite', site: inputRule }, response => {
+		const newRules = [...currentRule, inputRule];
+		chrome.runtime.sendMessage({ type: 'updateRule', newRules: newRules }, response => {
 			setCurrentRule(response);
 		});
 		setInputRule('');
 	};
+
+	const getOnclick = (rule: string) => {
+		const remove= (rulesList: string[], target: string) => {
+			return rulesList.filter(item => item !== target)
+		}
+		return () => {
+			console.log('deleting', rule);
+			const resultRules = remove(currentRule, rule)
+			chrome.runtime.sendMessage({ type: 'updateRule', newRules: resultRules }, response => {
+				setCurrentRule(response);
+			});
+		};
+	}
     
 	return (
 		<div className="w-60 h-72 max-h-80 overflow-auto">
 			<h1 className="text-center mt-3 text-xl text-cyan-800">Auto Redirect</h1>
 			<h2 className="mx-2 mt-2">Current Rules:</h2>
-			<div className="flex flex-col items-center mt-1 bg-slate-200 rounded mx-2 mb-20">
+			<div className="mt-1 bg-slate-200 rounded mx-2 mb-20">
 				<ul>
 					{currentRule && currentRule.map(rule => (
-						<li className="py-1 text-cyan-600" key={rule}>
-							{rule}
-						</li>
-					))}
+						<div key={rule} className='flex justify-center py-1'>
+							<li className=" text-cyan-600 inline">
+								{rule}
+							</li>
+							<p className="inline absolute right-4">
+								<button className='text-gray-600'
+									onClick={ getOnclick(rule) }
+								>
+									⨉
+								</button>
+							</p>
+						</div>
+					)
+					)}
 				</ul>
-				<div className="fixed bottom-6 rounded shadow-md">
+				<div className="fixed left-6 bottom-6 rounded shadow-md">
 					<Input 
 						placeholder="New rule"
 						className="input p-2 rounded-l"
