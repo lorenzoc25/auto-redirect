@@ -1,6 +1,6 @@
 {
   "name": "auto-redirect",
-  "version": "1.0.0",
+  "version": "0.0.2",
   "description": "Open pages in current tab instead of new tab on specific domains",
   "main": "index.js",
   "scripts": {
