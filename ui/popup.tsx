@@ -9,7 +9,7 @@ const Popup = () => {
 	const willMount = useRef(true);
 	if (willMount.current) {
 		chrome.runtime.sendMessage({ type: 'getCurrentRule' }, response => {
-			setCurrentRule(response);
+			setCurrentRule(response? response : []);
 		});
 	}
 	willMount.current = false;
