@@ -42,7 +42,9 @@ function listenForMessage() {
 				rules => {
 					rulesCache = rules;
 					// TODO: handle both type of rules
-					sendResponse(rules.redirectionRules);
+					sendResponse(
+						rulesCache.redirectionRules ? 
+						rulesCache.redirectionRules : []);
 				}
 			);
 			return true;

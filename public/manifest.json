@@ -1,30 +1,26 @@
 {
-  "manifest_version": 3,
-
   "name": "auto-redirect",
   "description": "Open pages in current tab instead of new tab on specific domains",
-  "version": "1.0",
-
-  "action": {
-    "default_icon": "icon.png",
-    "default_popup": "popup.html"
-  },
-
-  "content_scripts": [
-      {
-          "matches": ["<all_urls>"],
-          "js": ["js/content_script.js"]
-      }
-  ],
-
-  "background": {
-    "service_worker": "js/background.js"
-  },
-
+  "version": "0.0.2",
+  "manifest_version": 3,
   "permissions": [
-    "storage",
     "tabs",
     "activeTab",
-    "webRequest"
-  ]
+    "storage"
+  ],
+  "background": {
+    "service_worker": "src/background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://*/*",
+        "https://*/*"
+      ],
+      "js": ["src/content-script.js"]
+    }
+  ],
+  "action": {
+    "default_popup": "ui/popup.html"
+  }
 }
